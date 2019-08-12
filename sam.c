@@ -3197,9 +3197,9 @@ static int tweak_overlap_quality(bam1_t *a, bam1_t *b)
             #if DBG
                 fprintf(stderr,"%c",seq_nt16_str[bam_seqi(a_seq,a_iseq)]);
             #endif
-            // we are very confident about this base
-            int qual = a_qual[a_iseq] + b_qual[b_iseq];
-            a_qual[a_iseq] = qual>200 ? 200 : qual;
+            // use higher of two qualities method as done by fastq-join per Gaspar et al. 2018
+            int qual = (a_qual[a_iseq] >= b_qual[b_iseq]) ? a_qual[a_iseq] : b_qual[b_iseq];
+            a_qual[a_iseq] = qual;
             b_qual[b_iseq] = 0;
         }
         else
